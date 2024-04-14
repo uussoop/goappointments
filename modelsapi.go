@@ -33,14 +33,9 @@ func (r *Appointment) DeleteAppointment() error {
 }
 
 // CreateService creates a new service
-func (r *Service) CreateService(name, description string, duration time.Duration, price float64) error {
-	service := Service{
-		Name:        name,
-		Description: description,
-		Duration:    duration,
-		Price:       price,
-	}
-	return DB.Create(&service).Error
+func (r *Service) CreateService() error {
+
+	return DB.Create(r).Error
 }
 
 // GetAllServices retrieves all available services
