@@ -6,6 +6,30 @@ import (
 	"gorm.io/gorm"
 )
 
+type StatusType int16
+
+func (s *StatusType) String() string {
+	switch *s {
+	case 0:
+		return "Pending"
+	case 1:
+		return "Confirmed"
+	case 2:
+		return "Cancelled"
+	case 3:
+		return "Done"
+	default:
+		return "Pending"
+	}
+}
+
+const (
+	Pending = iota
+	Confirmed
+	Cancelled
+	Done
+)
+
 // Appointment struct represents a booking appointment
 type Appointment struct {
 	gorm.Model
@@ -14,16 +38,17 @@ type Appointment struct {
 	Service   Service
 	StartTime time.Time
 	EndTime   time.Time
-	Status    string // e.g. "Pending", "Confirmed", "Cancelled"
+	Status    StatusType // e.g. "Pending", "Confirmed", "Cancelled"
 }
 
 // Service struct represents a service offered by the booking system
 type Service struct {
 	gorm.Model
-	Name               string
+	Name               string `gorm:"unique"`
+	UserID             uint
 	Description        string
 	Duration           time.Duration
-	Price              float64
+	Price              int64
 	Appointments       []Appointment
 	ServiceDayConfigId []ServiceDayConfig
 }

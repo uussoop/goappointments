@@ -1,7 +1,6 @@
 package goappointments
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/sirupsen/logrus"
@@ -45,10 +44,11 @@ func InitDBStandlone(dbtype DatabaseType) (err error) {
 
 	err = os.Mkdir("database", 0777)
 	if err != nil {
-		fmt.Println(err)
+		logrus.Info(err)
+
 	}
 
-	DB, err = openDB("./testsqlite.db", gCnf)
+	DB, err = openDB("./database/testsqlite.db", gCnf)
 
 	if err != nil {
 		logrus.Info("failed to connect database: ", err)

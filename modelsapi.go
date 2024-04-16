@@ -5,80 +5,77 @@ import (
 )
 
 // CreateAppointment creates a new appointment
-func (r *Appointment) CreateAppointment(userId uint, serviceId uint, startTime time.Time, endTime time.Time, status string) error {
-	appointment := Appointment{
-		UserID:    userId,
-		ServiceID: serviceId,
-		StartTime: startTime,
-		EndTime:   endTime,
-		Status:    status,
-	}
-	return DB.Create(&appointment).Error
+func (r *Appointment) createAppointment() error {
+
+	return DB.Create(&r).Error
 }
 
 // GetAppointmentsByUserID retrieves all appointments for a given user ID
-func (r *Appointment) GetAppointmentsByUserID(userId uint) ([]Appointment, error) {
+func getAppointmentsByUserID(userId uint) ([]Appointment, error) {
 	var appointments []Appointment
 	return appointments, DB.Where("user_id = ?", userId).Find(&appointments).Error
 }
 
 // UpdateAppointment updates an existing appointment
-func (r *Appointment) UpdateAppointment(id uint, startTime time.Time, endTime time.Time, status string) error {
+func (r *Appointment) updateAppointment(id uint, startTime time.Time, endTime time.Time, status string) error {
 	return DB.Save(r).Error
 }
 
 // DeleteAppointment deletes an appointment by its ID
-func (r *Appointment) DeleteAppointment() error {
+func (r *Appointment) deleteAppointment() error {
 	return DB.Delete(r).Error
 }
 
 // CreateService creates a new service
-func (r *Service) CreateService() error {
+func (r *Service) createService() error {
 
 	return DB.Create(r).Error
 }
 
 // GetAllServices retrieves all available services
-func (r *Service) GetAllServices() ([]Service, error) {
+func (r *Service) getAllServices() ([]Service, error) {
 	var services []Service
 	return services, DB.Find(&services).Error
 }
 
+func getServiceByUserId(userId uint) ([]Service, error) {
+	var services []Service
+	return services, DB.Where("user_id = ?", userId).Find(&services).Error
+}
+
 // UpdateService updates an existing service
-func (r *Service) UpdateService() error {
+func (r *Service) updateService() error {
 	return DB.Save(r).Error
 }
 
 // DeleteService deletes a service by its ID
-func (r *Service) DeleteService() error {
+func (r *Service) deleteService() error {
 	return DB.Delete(r).Error
 }
 
 // CreateService creates a new service
-func (r *ServiceDayConfig) CreateServiceConfig(Date, StartTime, EndTime time.Time, serviceId uint, Description string) error {
-	serviceConfig := ServiceDayConfig{
-		Date:        Date,
-		StartTime:   StartTime,
-		EndTime:     EndTime,
-		ServiceID:   serviceId,
-		Description: Description,
-	}
-	return DB.Create(&serviceConfig).Error
+func (r *ServiceDayConfig) createServiceConfig() error {
+
+	return DB.Create(&r).Error
 }
 
 // GetAllServices retrieves all available services
-func (r *ServiceDayConfig) GetAllServicesConfig() ([]ServiceDayConfig, error) {
+func (r *ServiceDayConfig) getAllServicesConfig() ([]ServiceDayConfig, error) {
 	var servicesconfig []ServiceDayConfig
 	return servicesconfig, DB.Find(&servicesconfig).Error
 }
 
 // UpdateService updates an existing service
-func (r *ServiceDayConfig) UpdateServiceConfig() error {
+func (r *ServiceDayConfig) updateServiceConfig() error {
 
 	return DB.Save(r).Error
 }
+func getServiceConfigByServiceId(userId uint) ([]ServiceDayConfig, error) {
+	var servicesConfig []ServiceDayConfig
+	return servicesConfig, DB.Where("service_id = ?", userId).Find(&servicesConfig).Error
+}
 
 // DeleteService deletes a service by its ID
-func (r *ServiceDayConfig) DeleteServiceConfig() error {
+func (r *ServiceDayConfig) deleteServiceConfig() error {
 	return DB.Delete(r).Error
 }
