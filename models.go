@@ -24,9 +24,9 @@ func (s *StatusType) String() string {
 }
 
 const (
-	Pending = iota
+	Cancelled = iota
+	Pending
 	Confirmed
-	Cancelled
 	Done
 )
 

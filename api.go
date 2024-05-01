@@ -35,7 +35,7 @@ func GetServiceByUserId(userid uint) ([]Service, error) {
 func CreateServiceConfig(date, starttime, endtime time.Time, description string, serviceid uint) error {
 	serviceday := &ServiceDayConfig{
 		Date:        date,
-		Description: "workingday",
+		Description: description,
 		StartTime:   starttime,
 		EndTime:     endtime,
 		ServiceID:   serviceid,

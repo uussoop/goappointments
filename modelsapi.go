@@ -42,6 +42,10 @@ func getServiceByUserId(userId uint) ([]Service, error) {
 	var services []Service
 	return services, DB.Where("user_id = ?", userId).Find(&services).Error
 }
+func getServiceById(Id uint) (Service, error) {
+	var services Service
+	return services, DB.Where("id = ?", Id).First(&services).Error
+}
 
 // UpdateService updates an existing service
 func (r *Service) updateService() error {

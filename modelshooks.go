@@ -8,21 +8,25 @@ import (
 )
 
 func (a *Appointment) BeforeCreate(tx *gorm.DB) (err error) {
+	service, err := getServiceById(a.ServiceID)
+	if err != nil {
+		return fmt.Errorf("service doesnt exist")
+	}
+	if (a.EndTime.Sub(a.StartTime)) != service.Duration {
 
-	if (a.EndTime.Sub(a.StartTime)) != a.Service.Duration {
 		return fmt.Errorf("appointment time frame is less than or bigger than its service ")
 	}
 	var serviceConfig ServiceDayConfig
 	err = tx.Where("service_id = ? AND start_time < ? AND end_time > ?", a.ServiceID, a.StartTime, a.EndTime).First(&serviceConfig).Error
 	if err != nil {
-		return fmt.Errorf("cannot make this appointment  ")
+		return fmt.Errorf("cannot make this appointment  ", err)
 
 	}
 
 	// Check for overlapping appointments
 	var overlappingAppointments int64
 	err = tx.Model(&Appointment{}).
-		Where("user_id = ? AND ((? >= start_time AND ? < end_time) OR (? > start_time AND ? <= end_time))", a.UserID, a.StartTime, a.EndTime, a.StartTime, a.EndTime).
+		Where("user_id = ? AND status > 0 AND ((? >= start_time AND ? <= end_time) OR (? >= start_time AND ? <= end_time))", a.UserID, a.StartTime, a.EndTime, a.StartTime, a.EndTime).
 		Count(&overlappingAppointments).Error
 	if err != nil {
 		return err
